@@ -1,0 +1,127 @@
+/* report-detail.css - Bootstrap + CSS only */
+
+.report-detail-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px;
+  background: white;
+  min-height: calc(100vh - 60px);
+}
+
+.report-detail-container .back-btn {
+  background: #f0f0f0;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+}
+
+.report-detail-container .back-btn:hover {
+  background: #e0e0e0;
+  transform: translateX(-4px);
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.report-header h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #333;
+  flex: 1;
+}
+
+.report-header .status-badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+  margin-left: 20px;
+}
+
+.report-body {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.report-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 8px;
+}
+
+.report-section .info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .report-section .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.info-grid .info-item label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.info-grid .info-item p {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.report-section .description-text {
+  margin: 0;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+  background: #f9f9f9;
+  padding: 16px;
+  border-radius: 4px;
+}
+
+.report-section .report-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 12px;
+}
+
+.report-detail-container .loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.loading p {
+  margin: 0;
+  font-size: 16px;
+}

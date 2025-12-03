@@ -1,0 +1,72 @@
+<div class="report-detail-container">
+  <div *ngIf="report$ | async as report; else loading" class="report-detail-content">
+    <button class="back-btn" (click)="goBack()">← Back</button>
+
+    <div class="report-header">
+      <h1>{{ report.description }}</h1>
+      <div class="status-badge" [style.background-color]="getStatusBadgeColor(report.status)">
+        {{ report.status | uppercase }}
+      </div>
+    </div>
+
+    <div class="report-body">
+      <div class="report-section">
+        <h3>Location Information</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Street:</label>
+            <p>{{ report.street }}</p>
+          </div>
+          <div class="info-item">
+            <label>Barangay:</label>
+            <p>{{ report.barangay }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <h3>Reporter Information</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Name:</label>
+            <p>{{ report.reporterName || 'Anonymous' }}</p>
+          </div>
+          <div class="info-item">
+            <label>ID:</label>
+            <p>{{ report.reporterId }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-section">
+        <h3>Description</h3>
+        <p class="description-text">{{ report.description }}</p>
+      </div>
+
+      <div *ngIf="report.imageUrl" class="report-section">
+        <h3>Incident Photo</h3>
+        <img [src]="report.imageUrl" alt="Report photo" class="report-image" />
+      </div>
+
+      <div class="report-section">
+        <h3>Timeline</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Reported:</label>
+            <p>{{ report.createdAt | date: 'medium' }}</p>
+          </div>
+          <div class="info-item">
+            <label>Last Updated:</label>
+            <p>{{ report.updatedAt | date: 'medium' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <div class="loading">
+      <p>Loading report details...</p>
+    </div>
+  </ng-template>
+</div>

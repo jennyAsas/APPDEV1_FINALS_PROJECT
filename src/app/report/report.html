@@ -1,0 +1,261 @@
+<div class="report-page">
+  <div class="report-container">
+    <h2>Submit a Safety Alert</h2>
+    <p>Report safety concerns in your neighborhood. All fields marked with * are required.</p>
+
+    <ng-container *ngIf="authService.currentUser$ | async as user; else notLogged">
+      <form (ngSubmit)="onSubmit()" #reportForm="ngForm">
+        <div *ngIf="successMessage" class="message success">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="message error">{{ errorMessage }}</div>
+
+        <!-- Reporter Information Section -->
+        <div class="form-section">
+          <h3 class="section-title">Reporter Information</h3>
+
+          <div class="form-group">
+            <label for="fullName">Full Name *</label>
+            <input
+              id="fullName"
+              type="text"
+              name="fullName"
+              [(ngModel)]="fullName"
+              required
+              placeholder="Enter your full name"
+            />
+            <span *ngIf="validationErrors['fullName']" class="error-text">
+              {{ validationErrors['fullName'] }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              required
+              placeholder="your.email@example.com"
+            />
+            <span *ngIf="validationErrors['email']" class="error-text">
+              {{ validationErrors['email'] }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Safety Alert Details Section -->
+        <div class="form-section">
+          <h3 class="section-title">Safety Alert Details</h3>
+
+          <div class="form-group">
+            <label for="description">Describe the Safety Concern *</label>
+            <textarea
+              id="description"
+              name="description"
+              [(ngModel)]="description"
+              (blur)="saveFormProgress()"
+              rows="5"
+              required
+              placeholder="Describe what happened in detail..."
+            ></textarea>
+            <span *ngIf="validationErrors['description']" class="error-text">
+              {{ validationErrors['description'] }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="priority">Priority Level *</label>
+            <select
+              id="priority"
+              name="priority"
+              [(ngModel)]="priority"
+              (blur)="saveFormProgress()"
+              required
+            >
+              <option value="low">Low - Minor issue, no immediate danger</option>
+              <option value="medium">Medium - Moderate concern, needs attention</option>
+              <option value="high">High - Urgent, requires immediate action</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Location Information Section -->
+        <div class="form-section">
+          <h3 class="section-title">Location Information</h3>
+
+          <div class="form-group">
+            <label for="street">Street Address *</label>
+            <input
+              id="street"
+              type="text"
+              name="street"
+              [(ngModel)]="street"
+              (blur)="saveFormProgress()"
+              required
+              placeholder="e.g., Session Road"
+            />
+            <span *ngIf="validationErrors['street']" class="error-text">
+              {{ validationErrors['street'] }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="barangay">Barangay *</label>
+            <input
+              id="barangay"
+              type="text"
+              name="barangay"
+              [(ngModel)]="barangay"
+              (input)="filterBarangays($event)"
+              (focus)="showBarangaySuggestions = true"
+              (blur)="saveFormProgress()"
+              required
+              placeholder="Start typing to search barangays..."
+              autocomplete="off"
+            />
+            <div
+              *ngIf="showBarangaySuggestions && filteredBarangays.length > 0"
+              class="barangay-suggestions"
+            >
+              <div
+                *ngFor="let brgy of filteredBarangays.slice(0, 8)"
+                class="suggestion-item"
+                (mousedown)="selectBarangay(brgy)"
+              >
+                {{ brgy }}
+              </div>
+            </div>
+            <span *ngIf="validationErrors['barangay']" class="error-text">
+              {{ validationErrors['barangay'] }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="landmark">Landmark or Nearby Location (Optional)</label>
+            <input
+              id="landmark"
+              type="text"
+              name="landmark"
+              [(ngModel)]="landmark"
+              (blur)="saveFormProgress()"
+              placeholder="e.g., Near Burnham Park"
+            />
+          </div>
+
+          <div class="form-group location-info">
+            <label>GPS Coordinates *</label>
+            <button
+              type="button"
+              class="get-location-btn"
+              (click)="getCurrentLocation()"
+              [disabled]="isGettingLocation"
+            >
+              {{ isGettingLocation ? 'Getting Location...' : 'Get My Current Location' }}
+            </button>
+
+            <div *ngIf="location" class="location-display">
+              <p class="location-coords">
+                <strong>Latitude:</strong> {{ location.lat | number: '1.6-6' }}
+              </p>
+              <p class="location-coords">
+                <strong>Longitude:</strong> {{ location.lng | number: '1.6-6' }}
+              </p>
+              <p class="location-accuracy" *ngIf="locationAccuracy">
+                Accuracy: ± {{ locationAccuracy | number: '1.0-0' }} meters
+              </p>
+            </div>
+
+            <div *ngIf="locationError" class="location-error">
+              {{ locationError }}
+            </div>
+
+            <p class="help-text">
+              Location must be within Baguio City limits. Click the button above to automatically
+              detect your location.
+            </p>
+
+            <span *ngIf="validationErrors['location']" class="error-text">
+              {{ validationErrors['location'] }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Evidence Section -->
+        <div class="form-section">
+          <h3 class="section-title">Evidence</h3>
+
+          <div class="form-group">
+            <label for="proofImage">Proof of Incident (Photo) (Optional)</label>
+            <input
+              id="proofImage"
+              type="file"
+              name="proofImage"
+              accept="image/*"
+              (change)="onProofImageSelected($event)"
+            />
+            <p class="help-text">
+              Upload a clear photo of the incident. Maximum 5MB. This is optional but recommended
+              for verification.
+            </p>
+
+            <div *ngIf="proofImageFileName" class="image-preview-container">
+              <p class="file-name">
+                Selected file: <strong>{{ proofImageFileName }}</strong>
+              </p>
+              <div *ngIf="proofImageUrl" class="image-preview">
+                <img [src]="proofImageUrl" alt="Proof Preview" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="idImage">Valid ID (Optional)</label>
+            <input
+              id="idImage"
+              type="file"
+              name="idImage"
+              accept="image/*"
+              (change)="onIdImageSelected($event)"
+            />
+            <p class="help-text">
+              Upload a photo of your valid ID for verification purposes. Maximum 5MB.
+            </p>
+
+            <div *ngIf="idImageFileName" class="image-preview-container">
+              <p class="file-name">
+                Selected file: <strong>{{ idImageFileName }}</strong>
+              </p>
+              <div *ngIf="idImageUrl" class="image-preview">
+                <img [src]="idImageUrl" alt="ID Preview" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" [disabled]="isLoading || !location" class="submit-btn">
+          {{ isLoading ? 'Submitting Alert...' : 'Submit Safety Alert' }}
+        </button>
+      </form>
+    </ng-container>
+
+    <ng-template #notLogged>
+      <div class="not-logged">
+        <div class="auth-prompt-box">
+          <h3>Authentication Required</h3>
+          <p class="login-warning">
+            You need to create an account or sign in before you can submit a safety alert.
+          </p>
+          <p class="help-text">
+            Creating an account helps us verify reports and keep the community safe.
+          </p>
+          <div class="action-row">
+            <a class="btn login-btn" routerLink="/login">Sign In</a>
+            <span class="or-text">or</span>
+            <a class="btn signup-btn" routerLink="/login">Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

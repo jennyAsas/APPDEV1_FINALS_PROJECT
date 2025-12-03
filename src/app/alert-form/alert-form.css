@@ -1,0 +1,68 @@
+/* alert-form.css - Modern dark blue theme */
+
+.alert-form {
+    display: grid;
+    gap: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #95a5b8;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #34495e;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    background: #1a252f;
+    color: #fff;
+    transition: all 0.2s;
+}
+
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #5dade2;
+    background: #243340;
+}
+
+.form-group textarea::placeholder,
+.form-group select::placeholder {
+    color: #7f8c8d;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #5dade2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(93, 173, 226, 0.3);
+}
+
+.submit-btn:hover:not(:disabled) {
+    background-color: #3498db;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(93, 173, 226, 0.4);
+}
+
+.submit-btn:disabled {
+    background-color: #7f8c8d;
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+}

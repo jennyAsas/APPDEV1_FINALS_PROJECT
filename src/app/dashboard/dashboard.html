@@ -1,0 +1,519 @@
+<div class="dashboard-container">
+  @if (sosActive) {
+    <div class="sos-overlay" [class.sos-success]="sosSuccess">
+      <div class="sos-modal">
+        @if (!sosSuccess) {
+          <div class="sos-sending">
+            <div class="sos-pulse-ring"></div>
+            <div class="sos-pulse-ring delay-1"></div>
+            <div class="sos-pulse-ring delay-2"></div>
+            <div class="sos-icon-large">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polygon
+                  points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"
+                ></polygon>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+          </div>
+          <h2 class="sos-title">SENDING EMERGENCY SOS</h2>
+          <p class="sos-subtitle">Please wait while we alert emergency services...</p>
+          <div class="sos-location-status">
+            @if (userLocation) {
+              <span class="location-obtained">Location obtained</span>
+            } @else {
+              <span class="location-pending">Obtaining your location...</span>
+            }
+          </div>
+          <div class="sos-progress-bar">
+            <div class="sos-progress-fill" [style.width.%]="sosProgress"></div>
+          </div>
+          <p class="sos-countdown">{{ sosCountdown }} seconds remaining</p>
+        } @else {
+          <div class="sos-success-container">
+            <div class="sos-success-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <h2 class="sos-title success">EMERGENCY RECEIVED</h2>
+            <p class="sos-subtitle">Admin has been notified immediately.</p>
+            <p class="sos-info">Help is on the way. Stay calm and safe.</p>
+            <div class="sos-details">
+              <div
+                class="sos-detail-item"
+                [class.success]="userLocation"
+                [class.warning]="!userLocation"
+              >
+                <div class="detail-icon location"></div>
+                @if (userLocation) {
+                  <span>Your location has been shared</span>
+                } @else {
+                  <span>Location not available - please share your location manually</span>
+                }
+              </div>
+              <div class="sos-detail-item">
+                <div class="detail-icon services"></div>
+                <span>Emergency services alerted</span>
+              </div>
+              <div class="sos-detail-item">
+                <div class="detail-icon admin"></div>
+                <span>Admin notified in real-time</span>
+              </div>
+            </div>
+            <button class="sos-close-btn" (click)="closeSosOverlay()">Close</button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="dashboard-content">
+    <!-- Left Section: Emergency SOS -->
+    <div class="left-section">
+      <div class="emergency-sos">
+        <!-- Animated Background Rings -->
+        <div class="sos-bg-rings">
+          <div class="ring ring-1"></div>
+          <div class="ring ring-2"></div>
+          <div class="ring ring-3"></div>
+        </div>
+
+        <div class="sos-content">
+          <div class="sos-icon-container">
+            <div class="sos-glow"></div>
+            <div class="sos-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="50"
+                height="50"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polygon
+                  points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"
+                ></polygon>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+          </div>
+
+          <h2>EMERGENCY<br />SOS</h2>
+          <p class="sos-tagline">One tap emergency alert</p>
+
+          @if (currentUser$ | async; as user) {
+            <div class="sos-btn-wrapper">
+              <div class="sos-btn-pulse"></div>
+              <button class="sos-btn" (click)="triggerSOS()">
+                <span class="btn-text">PRESS SOS</span>
+                <span class="btn-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                  >
+                    <path
+                      d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                    ></path>
+                  </svg>
+                </span>
+              </button>
+            </div>
+          } @else {
+            <div class="sos-btn-wrapper disabled">
+              <button class="sos-btn disabled" disabled title="Please sign in to use Emergency SOS">
+                <span class="btn-text">PRESS SOS</span>
+              </button>
+            </div>
+            <p class="auth-notice">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"
+                />
+              </svg>
+              <a routerLink="/login" class="auth-link">Sign in</a> to enable
+            </p>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Middle Section: Citizen Reports -->
+    <div class="middle-section">
+      <div class="section-header">
+        <h3>Citizen Reports</h3>
+        <p class="section-subtitle">Reports submitted by community members</p>
+      </div>
+      <div class="alerts-grid">
+        <div *ngIf="citizenReports$ | async as reports">
+          <div *ngIf="reports.length > 0; else noReports" class="alerts-container">
+            <div
+              *ngFor="let report of reports"
+              class="alert-card"
+              (click)="viewReportDetail(report.id)"
+              [class.priority-high]="report.priority === 'high'"
+              [class.priority-medium]="report.priority === 'medium'"
+              [class.priority-low]="report.priority === 'low' || !report.priority"
+            >
+              <!-- Priority Badge -->
+              <div
+                class="priority-badge"
+                [class.high]="report.priority === 'high'"
+                [class.medium]="report.priority === 'medium'"
+                [class.low]="report.priority === 'low' || !report.priority"
+              >
+                <svg
+                  *ngIf="report.priority === 'high'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12 2L1 21h22L12 2zm0 3.83L19.53 19H4.47L12 5.83zM11 10v4h2v-4h-2zm0 6v2h2v-2h-2z"
+                  />
+                </svg>
+                <svg
+                  *ngIf="report.priority === 'medium'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                  />
+                </svg>
+                <svg
+                  *ngIf="report.priority === 'low' || !report.priority"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
+                  />
+                </svg>
+                <span>{{
+                  report.priority === 'high'
+                    ? 'HIGH'
+                    : report.priority === 'medium'
+                      ? 'MEDIUM'
+                      : 'LOW'
+                }}</span>
+              </div>
+
+              <!-- Card Content -->
+              <div class="card-body">
+                <h4 class="alert-title">{{ report.description }}</h4>
+
+                <div class="alert-location">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span>{{ report.street }}, {{ report.barangay }}</span>
+                </div>
+
+                <div class="alert-meta">
+                  <div class="reporter">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path
+                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                      />
+                    </svg>
+                    <span>{{ report.reporterName || 'Anonymous' }}</span>
+                  </div>
+                  <div class="timestamp" *ngIf="report.createdAt">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Recent</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- View Details Arrow -->
+              <div class="card-arrow">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <ng-template #noReports>
+            <div class="no-alerts">
+              <div class="no-alerts-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                </svg>
+              </div>
+              <h4>All Clear</h4>
+              <p>No safety alerts at this time. Stay vigilant!</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Section: Interactive Map -->
+    <div class="right-section">
+      <div class="section-header">
+        <h3>Incident Map</h3>
+        <p class="section-subtitle">View reported incidents</p>
+      </div>
+      <div class="map-card">
+        <div class="map-preview" (click)="viewFullMap()">
+          <div class="map-illustration">
+            <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+              <!-- Map Background -->
+              <rect width="200" height="160" fill="#e3f2fd" />
+              <!-- Roads -->
+              <path d="M0 80 L200 80" stroke="#b0bec5" stroke-width="3" fill="none" />
+              <path d="M100 0 L100 160" stroke="#b0bec5" stroke-width="3" fill="none" />
+              <path d="M50 40 L150 120" stroke="#cfd8dc" stroke-width="2" fill="none" />
+              <!-- Location Markers -->
+              <g transform="translate(60, 50)">
+                <circle r="12" fill="#dc3545" opacity="0.3" />
+                <circle r="6" fill="#dc3545" />
+              </g>
+              <g transform="translate(130, 70)">
+                <circle r="10" fill="#fd7e14" opacity="0.3" />
+                <circle r="5" fill="#fd7e14" />
+              </g>
+              <g transform="translate(90, 110)">
+                <circle r="8" fill="#28a745" opacity="0.3" />
+                <circle r="4" fill="#28a745" />
+              </g>
+              <g transform="translate(150, 40)">
+                <circle r="10" fill="#dc3545" opacity="0.3" />
+                <circle r="5" fill="#dc3545" />
+              </g>
+            </svg>
+          </div>
+          <div class="map-overlay">
+            <div class="map-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </div>
+            <span>Click to explore</span>
+          </div>
+        </div>
+        <div class="map-legend">
+          <div class="legend-item">
+            <span class="legend-dot high"></span>
+            <span>High Priority</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot medium"></span>
+            <span>Medium</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot low"></span>
+            <span>Low</span>
+          </div>
+        </div>
+        <button class="view-map-btn" (click)="viewFullMap()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+            <line x1="8" y1="2" x2="8" y2="18"></line>
+            <line x1="16" y1="6" x2="16" y2="22"></line>
+          </svg>
+          View Full Map
+        </button>
+      </div>
+
+      <!-- Police Alerts Section (Below Map) -->
+      <div class="police-alerts-section">
+        <div class="section-header">
+          <h3>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"
+              />
+            </svg>
+            Police Alerts
+          </h3>
+          <p class="section-subtitle">Official announcements from BCCD</p>
+        </div>
+        <div class="police-alerts-container">
+          <div *ngIf="adminAlerts$ | async as alerts">
+            <div *ngIf="alerts.length > 0; else noPoliceAlerts">
+              <div
+                *ngFor="let alert of alerts"
+                class="police-alert-card"
+                (click)="viewReportDetail(alert.id)"
+                [class.priority-high]="alert.priority === 'high'"
+                [class.priority-medium]="alert.priority === 'medium'"
+                [class.priority-low]="alert.priority === 'low' || !alert.priority"
+              >
+                <div class="police-badge">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+                  </svg>
+                  <span>OFFICIAL</span>
+                </div>
+                <h4 class="police-alert-title">{{ alert.description }}</h4>
+                <div class="police-alert-location">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span>{{ alert.street }}, {{ alert.barangay }}</span>
+                </div>
+                <div
+                  class="police-alert-priority"
+                  [class.high]="alert.priority === 'high'"
+                  [class.medium]="alert.priority === 'medium'"
+                  [class.low]="alert.priority === 'low' || !alert.priority"
+                >
+                  {{
+                    alert.priority === 'high'
+                      ? 'HIGH PRIORITY'
+                      : alert.priority === 'medium'
+                        ? 'MEDIUM'
+                        : 'LOW'
+                  }}
+                </div>
+              </div>
+            </div>
+            <ng-template #noPoliceAlerts>
+              <div class="no-police-alerts">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  <polyline points="9 12 12 15 16 10"></polyline>
+                </svg>
+                <p>No police alerts at this time</p>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

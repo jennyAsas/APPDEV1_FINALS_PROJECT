@@ -1,0 +1,37 @@
+<div class="full-map-container">
+  <!-- Map Controls Header -->
+  <div class="map-controls">
+    <h2 class="map-title">Incident Map View</h2>
+    <div class="filter-controls">
+      <button class="filter-btn" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">
+        All Incidents
+      </button>
+      <button
+        class="filter-btn filter-high"
+        [class.active]="activeFilter === 'high'"
+        (click)="setFilter('high')"
+      >
+        🔴 High Priority
+      </button>
+      <button
+        class="filter-btn filter-medium"
+        [class.active]="activeFilter === 'medium'"
+        (click)="setFilter('medium')"
+      >
+        🟠 Medium Priority
+      </button>
+      <button
+        class="filter-btn filter-low"
+        [class.active]="activeFilter === 'low'"
+        (click)="setFilter('low')"
+      >
+        🟢 Low Priority
+      </button>
+    </div>
+  </div>
+
+  <!-- Full Screen Map -->
+  <div class="map-wrapper-fullscreen">
+    <div id="mountainSentinelMap" class="map-container"></div>
+  </div>
+</div>

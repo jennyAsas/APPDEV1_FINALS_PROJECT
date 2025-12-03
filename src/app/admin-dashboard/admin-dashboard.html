@@ -1,0 +1,265 @@
+<div class="admin-dashboard-container">
+  <h2>Admin Dashboard</h2>
+  <p>Manage incident reports submitted by users.</p>
+
+  <!-- Navigation Tabs -->
+  <div class="dashboard-tabs">
+    <button
+      class="tab-btn"
+      [class.active]="activeView === 'pending'"
+      (click)="switchView('pending')"
+    >
+      Pending Alerts
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeView === 'approved'"
+      (click)="switchView('approved')"
+    >
+      Published Alerts
+    </button>
+  </div>
+
+  <!-- PENDING REPORTS VIEW -->
+  @if (activeView === 'pending') {
+    <div class="reports-management">
+      <h3 class="section-subtitle">Pending Safety Alerts - Awaiting Review</h3>
+
+      @if (pendingReports$ | async; as reports) {
+        @if (reports.length > 0) {
+          <div class="reports-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Submitted</th>
+                  <th>Description</th>
+                  <th>Priority</th>
+                  <th>Location</th>
+                  <th>Reporter</th>
+                  <th>Image</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (report of reports; track report.id) {
+                  <tr [attr.data-id]="report.id">
+                    <td>
+                      <div class="date-display">
+                        <div>{{ report.createdAt | date: 'MMM d, y' }}</div>
+                        <small>{{ report.createdAt | date: 'h:mm a' }}</small>
+                      </div>
+                    </td>
+                    <td>
+                      @if (editingId !== report.id) {
+                        <strong>{{ report.description }}</strong>
+                      } @else {
+                        <textarea [(ngModel)]="editBuffer.description" rows="2"></textarea>
+                      }
+                    </td>
+                    <td>
+                      <span
+                        class="priority-badge"
+                        [class]="'priority-' + (report.priority || 'medium')"
+                      >
+                        {{ report.priority || 'medium' | uppercase }}
+                      </span>
+                    </td>
+                    <td>
+                      @if (editingId !== report.id) {
+                        <div class="location-display">
+                          <div>{{ report.street }}</div>
+                          <small>{{ report.barangay }}</small>
+                          @if (report.city) {
+                            <small>{{ report.city }}</small>
+                          }
+                        </div>
+                      } @else {
+                        <div class="edit-location">
+                          <input type="text" [(ngModel)]="editBuffer.street" placeholder="Street" />
+                          <input
+                            type="text"
+                            [(ngModel)]="editBuffer.barangay"
+                            placeholder="Barangay"
+                          />
+                        </div>
+                      }
+                    </td>
+                    <td>
+                      @if (editingId !== report.id) {
+                        <div class="reporter-info">
+                          <p>
+                            <strong>{{ report.reporterName || 'N/A' }}</strong>
+                          </p>
+                          <small>{{ report.reporterId }}</small>
+                        </div>
+                      } @else {
+                        <div class="edit-reporter">
+                          <input
+                            type="text"
+                            [(ngModel)]="editBuffer.reporterName"
+                            placeholder="Name"
+                          />
+                          <input type="text" [(ngModel)]="editBuffer.reporterId" placeholder="ID" />
+                        </div>
+                      }
+                    </td>
+                    <td>
+                      @if (report.imageUrl) {
+                        <img [src]="report.imageUrl" alt="Report image" class="thumbnail" />
+                      } @else {
+                        <span class="no-image">No image</span>
+                      }
+                    </td>
+                    <td class="actions">
+                      @if (editingId !== report.id) {
+                        <button (click)="startEdit(report)" class="btn-edit">Edit</button>
+                      }
+                      @if (editingId === report.id) {
+                        <button (click)="saveEdit(report.id)" class="btn-save">Save</button>
+                        <button (click)="cancelEdit()" class="btn-cancel">Cancel</button>
+                      }
+                      <button (click)="approveReport(report.id)" class="btn-approve">
+                        Approve
+                      </button>
+                      <button (click)="deleteReport(report.id)" class="btn-delete">Delete</button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <div class="no-reports-message">
+            <p>No pending reports. All reports have been reviewed!</p>
+          </div>
+        }
+      } @else {
+        <div class="loading">Loading reports...</div>
+      }
+    </div>
+  }
+
+  <!-- APPROVED REPORTS VIEW -->
+  @if (activeView === 'approved') {
+    <div class="reports-management">
+      <h3 class="section-subtitle">Published Safety Alerts - Visible to Residents</h3>
+
+      <!-- Filters -->
+      <div class="filters-bar">
+        <div class="filter-group">
+          <label for="priorityFilter">Filter by Priority:</label>
+          <select id="priorityFilter" [(ngModel)]="approvedFilterPriority" class="filter-select">
+            <option value="all">All Priorities</option>
+            <option value="high">High Priority</option>
+            <option value="medium">Medium Priority</option>
+            <option value="low">Low Priority</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="searchFilter">Search:</label>
+          <input
+            type="text"
+            id="searchFilter"
+            [(ngModel)]="approvedFilterSearch"
+            placeholder="Search by description, location, or reporter..."
+            class="filter-input"
+          />
+        </div>
+
+        <button class="btn-reset-filters" (click)="resetFilters()">Reset Filters</button>
+      </div>
+
+      @if (approvedReports$ | async; as reports) {
+        @if (getFilteredApprovedReports(reports); as filteredReports) {
+          @if (reports.length > 0) {
+            <div class="results-count">
+              Showing {{ filteredReports.length }} of {{ reports.length }} approved reports
+            </div>
+          }
+
+          @if (filteredReports.length > 0) {
+            <div class="reports-grid">
+              @for (report of filteredReports; track report.id) {
+                <div class="report-card">
+                  <div class="card-header">
+                    <span
+                      class="priority-badge"
+                      [class]="'priority-' + (report.priority || 'medium')"
+                    >
+                      {{ report.priority || 'medium' | uppercase }}
+                    </span>
+                    <span class="report-date">
+                      {{ report.timestamp || report.createdAt | date: 'MMM d, y h:mm a' }}
+                    </span>
+                  </div>
+
+                  <div class="card-body">
+                    <h4 class="report-title">{{ report.description }}</h4>
+
+                    <div class="report-details">
+                      <div class="detail-item">
+                        <strong>Location:</strong>
+                        <span>{{ report.street }}, {{ report.barangay }}</span>
+                        @if (report.city) {
+                          <span class="text-muted">{{ report.city }}</span>
+                        }
+                      </div>
+
+                      @if (report.location) {
+                        <div class="detail-item">
+                          <strong>Coordinates:</strong>
+                          <span class="coords"
+                            >{{ report.location.lat | number: '1.6-6' }},
+                            {{ report.location.lng | number: '1.6-6' }}</span
+                          >
+                        </div>
+                      }
+
+                      <div class="detail-item">
+                        <strong>Reporter:</strong>
+                        <span>{{ report.reporterName || 'N/A' }}</span>
+                      </div>
+
+                      @if (report.reporterEmail) {
+                        <div class="detail-item">
+                          <strong>Email:</strong>
+                          <span>{{ report.reporterEmail }}</span>
+                        </div>
+                      }
+                    </div>
+
+                    @if (report.imageUrl) {
+                      <div class="report-image">
+                        <img [src]="report.imageUrl" alt="Report evidence" />
+                      </div>
+                    }
+                  </div>
+
+                  <div class="card-footer">
+                    <button class="btn-delete-approved" (click)="deleteApprovedReport(report.id)">
+                      Delete Report
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="no-reports-message">
+              @if (approvedFilterPriority !== 'all' || approvedFilterSearch) {
+                <p>No approved reports match your filters.</p>
+              }
+              @if (
+                approvedFilterPriority === 'all' && !approvedFilterSearch && reports.length === 0
+              ) {
+                <p>No approved reports yet.</p>
+              }
+            </div>
+          }
+        }
+      } @else {
+        <div class="loading">Loading approved reports...</div>
+      }
+    </div>
+  }
+</div>

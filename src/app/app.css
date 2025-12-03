@@ -1,0 +1,629 @@
+/* app.css - Bootstrap + CSS only */
+
+.app-header {
+    background: linear-gradient(135deg, #1a3a52 0%, #2a5a7a 100%);
+    color: white;
+    padding: 12px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    height: 70px;
+    position: relative;
+    z-index: 1000;
+}
+
+.app-header .header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-left .logo-area {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.logo-area .logo-badge {
+    font-size: 13px;
+    font-weight: 800;
+    color: #1a3a52;
+    text-align: center;
+    line-height: 1;
+}
+
+.header-left h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* User Role Indicator next to title */
+.user-role-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px 4px 6px;
+    background: linear-gradient(135deg, #50c878 0%, #3ba55c 100%);
+    border-radius: 15px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: white;
+    box-shadow: 0 2px 6px rgba(80, 200, 120, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-role-indicator .role-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.user-role-indicator .role-icon svg {
+    color: white;
+    width: 11px;
+    height: 11px;
+}
+
+.user-role-indicator .role-text {
+    line-height: 1;
+}
+
+.user-role-indicator.admin-indicator {
+    background: linear-gradient(135deg, #ffd700 0%, #f0c800 100%);
+    color: #1a3a52;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.45);
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    animation: adminGlow 3s ease-in-out infinite;
+}
+
+.user-role-indicator.admin-indicator .role-icon {
+    background: rgba(26, 58, 82, 0.2);
+}
+
+.user-role-indicator.admin-indicator .role-icon svg {
+    color: #1a3a52;
+}
+
+@keyframes adminGlow {
+    0%, 100% {
+        box-shadow: 0 2px 10px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 4px 18px rgba(255, 215, 0, 0.7);
+    }
+}
+
+/* Hamburger Menu Button */
+.hamburger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 10px;
+    transition: all 0.3s ease;
+    z-index: 1002;
+}
+
+.hamburger-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.hamburger-line {
+    width: 22px;
+    height: 3px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 6px);
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -6px);
+}
+
+/* Menu Overlay */
+.menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.menu-overlay.open {
+    opacity: 1;
+}
+
+.app-header .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-nav a,
+.header-nav button {
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.header-nav a:hover,
+.header-nav button:hover {
+    background-color: rgba(255,255,255,0.15);
+    transform: translateY(-1px);
+}
+
+.header-nav a.active {
+    background-color: rgba(255,255,255,0.2);
+    box-shadow: inset 0 -2px 0 rgba(255, 255, 255, 0.5);
+}
+
+.header-nav .report-link {
+    background: linear-gradient(135deg, #50c878 0%, #3ba55c 100%);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(80, 200, 120, 0.3);
+}
+
+.header-nav .report-link:hover {
+    background: linear-gradient(135deg, #45b066 0%, #2e8b57 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(80, 200, 120, 0.4);
+}
+
+.header-nav .login-link {
+    background: linear-gradient(135deg, #50c878 0%, #3ba55c 100%);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(80, 200, 120, 0.3);
+}
+
+.header-nav .login-link:hover {
+    background: linear-gradient(135deg, #45b066 0%, #2e8b57 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(80, 200, 120, 0.4);
+}
+
+.header-nav .logout-btn {
+    background: rgba(255,255,255,0.15);
+    font-size: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header-nav .logout-btn:hover {
+    background-color: rgba(255,255,255,0.25);
+}
+
+.header-nav .notification-link {
+    position: relative;
+    padding: 12px 18px;
+}
+
+.header-nav .unread-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #d32f2f;
+    color: white;
+    border-radius: 50%;
+    min-width: 20px;
+    height: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0 4px;
+    animation: pulse 2s infinite;
+}
+
+.header-nav .unread-badge.hidden {
+    display: none;
+}
+
+.header-nav .sos-emergency-link {
+    background: rgba(211, 47, 47, 0.2);
+    border: 2px solid rgba(211, 47, 47, 0.5);
+    font-weight: 700;
+}
+
+.header-nav .sos-emergency-link:hover {
+    background: rgba(211, 47, 47, 0.35);
+    transform: translateY(-1px);
+}
+
+.header-nav .sos-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #d32f2f;
+    color: white;
+    border-radius: 50%;
+    min-width: 22px;
+    height: 22px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0 5px;
+    animation: urgentPulse 1s infinite;
+    box-shadow: 0 0 12px rgba(211, 47, 47, 0.8);
+}
+
+.header-nav .sos-badge.hidden {
+    display: none;
+}
+
+@keyframes urgentPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+.header-nav .admin-link,
+.header-nav .admin-report-link {
+    background: rgba(255, 215, 0, 0.15);
+    border: 2px solid rgba(255, 215, 0, 0.35);
+}
+
+.header-nav .admin-link:hover,
+.header-nav .admin-report-link:hover {
+    background: rgba(255, 215, 0, 0.3);
+    transform: translateY(-1px);
+}
+
+.app-main {
+    padding: 0;
+    min-height: calc(100vh - 70px);
+}
+
+.global-sos {
+    position: fixed;
+    right: 24px;
+    bottom: 120px;
+    width: 220px;
+    z-index: 1200;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Responsive Navigation */
+@media (max-width: 1200px) {
+    .app-header {
+        padding: 12px 40px;
+    }
+    
+    .header-nav a,
+    .header-nav button {
+        padding: 10px 18px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 992px) {
+    .app-header {
+        padding: 10px 25px;
+    }
+    
+    .hamburger-btn {
+        display: flex;
+    }
+    
+    .menu-overlay {
+        display: block;
+    }
+    
+    .menu-overlay.open {
+        display: block;
+    }
+    
+    .header-nav {
+        position: fixed;
+        top: 0;
+        right: -320px;
+        width: 300px;
+        height: 100vh;
+        background: linear-gradient(180deg, #1a3a52 0%, #0d1f2d 100%);
+        flex-direction: column;
+        align-items: stretch;
+        padding: 90px 20px 30px;
+        gap: 8px;
+        transition: right 0.3s ease;
+        z-index: 1001;
+        box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
+        overflow-y: auto;
+    }
+    
+    .header-nav.open {
+        right: 0;
+    }
+    
+    .header-nav a,
+    .header-nav button {
+        padding: 15px 20px;
+        font-size: 15px;
+        border-radius: 10px;
+        justify-content: flex-start;
+        width: 100%;
+    }
+    
+    .header-nav .logout-btn {
+        margin-top: auto;
+        background: rgba(220, 53, 69, 0.2);
+        border: 1px solid rgba(220, 53, 69, 0.4);
+    }
+    
+    .header-nav .logout-btn:hover {
+        background: rgba(220, 53, 69, 0.3);
+    }
+}
+
+@media (max-width: 600px) {
+    .app-header {
+        padding: 10px 15px;
+        height: auto;
+        min-height: 65px;
+    }
+    
+    .header-left .brand-section {
+        gap: 3px;
+    }
+    
+    .user-role-indicator {
+        padding: 3px 8px 3px 5px;
+        font-size: 0.6rem;
+        gap: 4px;
+    }
+    
+    .user-role-indicator .role-icon {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .user-role-indicator .role-icon svg {
+        width: 9px;
+        height: 9px;
+    }
+    
+    .header-left .logo-area {
+        width: 42px;
+        height: 42px;
+    }
+    
+    .logo-area .logo-badge {
+        font-size: 11px;
+    }
+    
+    .header-left h1 {
+        font-size: 1rem;
+    }
+    
+    .hamburger-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .hamburger-line {
+        width: 20px;
+    }
+    
+    .header-nav {
+        width: 280px;
+        right: -290px;
+        padding: 80px 15px 25px;
+    }
+    
+    .header-nav a,
+    .header-nav button {
+        padding: 14px 16px;
+        font-size: 14px;
+    }
+}
+
+/* Authentication Prompt Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.auth-prompt-modal {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border: 3px solid #ffc107;
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    text-align: center;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.auth-prompt-modal .close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 32px;
+    color: #856404;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.auth-prompt-modal .close-btn:hover {
+    color: #d32f2f;
+    transform: scale(1.1);
+}
+
+.auth-prompt-modal .modal-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.auth-prompt-modal h2 {
+    font-size: 1.8rem;
+    color: #856404;
+    margin: 0 0 15px 0;
+    font-weight: 700;
+}
+
+.auth-prompt-modal .modal-message {
+    font-size: 1.1rem;
+    color: #856404;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.auth-prompt-modal .modal-submessage {
+    font-size: 0.95rem;
+    color: #856404;
+    margin: 0 0 30px 0;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-btn {
+    padding: 14px 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.modal-btn.primary-btn {
+    background: linear-gradient(135deg, #2c5282 0%, #1e3a5f 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(44, 82, 130, 0.3);
+}
+
+.modal-btn.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(44, 82, 130, 0.4);
+}
+
+.modal-btn.secondary-btn {
+    background: white;
+    color: #856404;
+    border: 2px solid #ffc107;
+}
+
+.modal-btn.secondary-btn:hover {
+    background: #f8f9fa;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+    .auth-prompt-modal {
+        padding: 30px 20px;
+        max-width: 95%;
+    }
+
+    .auth-prompt-modal h2 {
+        font-size: 1.5rem;
+    }
+
+    .auth-prompt-modal .modal-message {
+        font-size: 1rem;
+    }
+}

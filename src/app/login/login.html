@@ -1,0 +1,151 @@
+<div class="login-bg">
+  <div class="login-card">
+    <div class="login-tabs">
+      <button [class.active]="tab === 'admin'" (click)="setTab('admin')">Login as Admin</button>
+      <button [class.active]="tab === 'user'" (click)="setTab('user')">Login as User</button>
+    </div>
+
+    <!-- ADMIN LOGIN FORM -->
+    @if (tab === 'admin') {
+      <div class="admin-login-section">
+        <h2>ADMIN LOGIN</h2>
+        <form (ngSubmit)="onSubmitAdmin()" #adminForm="ngForm" class="login-form">
+          <div class="form-group">
+            <label for="adminEmail">Username</label>
+            <input
+              id="adminEmail"
+              type="email"
+              name="adminEmail"
+              [(ngModel)]="adminEmail"
+              required
+              placeholder="admin@example.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for="adminPassword">Password</label>
+            <input
+              id="adminPassword"
+              type="password"
+              name="adminPassword"
+              [(ngModel)]="adminPassword"
+              required
+              placeholder="••••••••"
+            />
+          </div>
+          <div *ngIf="adminErrorMessage" class="error-message">{{ adminErrorMessage }}</div>
+          <button
+            type="submit"
+            [disabled]="adminForm.invalid || isLoading"
+            class="login-btn admin-btn"
+          >
+            {{ isLoading ? 'Signing in...' : 'Login' }}
+          </button>
+        </form>
+      </div>
+    }
+
+    <!-- USER LOGIN FORM -->
+    @if (tab === 'user') {
+      <div class="user-login-section">
+        <h2>USER LOGIN</h2>
+        <form (ngSubmit)="onSubmitUser()" #userForm="ngForm" class="login-form">
+          <div class="form-group">
+            <label for="userEmail">Username</label>
+            <input
+              id="userEmail"
+              type="email"
+              name="userEmail"
+              [(ngModel)]="userEmail"
+              required
+              placeholder="user@example.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for="userPassword">Password</label>
+            <input
+              id="userPassword"
+              type="password"
+              name="userPassword"
+              [(ngModel)]="userPassword"
+              required
+              placeholder="••••••••"
+            />
+          </div>
+          <div *ngIf="userErrorMessage" class="error-message">{{ userErrorMessage }}</div>
+          <button
+            type="submit"
+            [disabled]="userForm.invalid || isLoading"
+            class="login-btn user-btn"
+          >
+            {{ isLoading ? 'Signing in...' : 'Login' }}
+          </button>
+        </form>
+      </div>
+    }
+
+    <!-- SIGNUP FORM -->
+    @if (tab === 'signup') {
+      <div class="signup-section">
+        <h2>CREATE ACCOUNT</h2>
+        <form (ngSubmit)="onSubmit()" #signupFormRef="ngForm" class="signup-form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              [(ngModel)]="email"
+              required
+              placeholder="your@email.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for="displayName">Full Name (optional)</label>
+            <input
+              id="displayName"
+              type="text"
+              name="displayName"
+              [(ngModel)]="displayName"
+              placeholder="Your Full Name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              [(ngModel)]="password"
+              required
+              placeholder="••••••••"
+              minlength="6"
+            />
+          </div>
+          <div class="form-group">
+            <label for="confirm">Confirm Password</label>
+            <input
+              id="confirm"
+              type="password"
+              name="confirm"
+              [(ngModel)]="confirmPassword"
+              required
+              placeholder="••••••••"
+            />
+          </div>
+          <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+          <button type="submit" [disabled]="signupFormRef.invalid || isLoading" class="signup-btn">
+            {{ isLoading ? 'Creating account...' : 'Create Account' }}
+          </button>
+        </form>
+        <div class="back-to-login">
+          <button class="back-link" (click)="setTab('user')">← Back to Login</button>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- CREATE ACCOUNT BUTTON (Outside card, only shown on login tabs) -->
+  <div class="create-account-section" *ngIf="tab !== 'signup'">
+    <button class="btn create-account-btn" (click)="setTab('signup')">Create Account</button>
+  </div>
+</div>

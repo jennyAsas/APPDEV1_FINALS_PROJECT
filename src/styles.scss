@@ -1,1 +1,71 @@
-/* You can add global styles to this file, and also import other style files */
+/* Bootstrap CSS */
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* Leaflet CSS for Map */
+@import "leaflet/dist/leaflet.css";
+
+/* Global styling */
+:root {
+   --sentinel-blue: #0b57a4;
+   --sentinel-gold: #f6c114;
+   --safety-green: #4CAF50;
+   --alert-red: #d32f2f;
+   --muted: #666666;
+   
+   /* Responsive breakpoints */
+   --breakpoint-xs: 480px;
+   --breakpoint-sm: 576px;
+   --breakpoint-md: 768px;
+   --breakpoint-lg: 992px;
+   --breakpoint-xl: 1200px;
+}
+
+* {
+   box-sizing: border-box;
+}
+
+body {
+   margin: 0;
+   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+   background-color: #f4f4f9;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+   height: 100%;
+   overflow-x: hidden;
+}
+
+/* Global responsive utilities */
+img {
+   max-width: 100%;
+   height: auto;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+   html {
+      font-size: 14px;
+   }
+   
+   h1 { font-size: 1.75rem; }
+   h2 { font-size: 1.5rem; }
+   h3 { font-size: 1.25rem; }
+}
+
+@media (max-width: 480px) {
+   html {
+      font-size: 13px;
+   }
+}
+
+/* Touch-friendly tap targets */
+@media (max-width: 768px) {
+   button, 
+   a, 
+   input[type="submit"],
+   .btn {
+      min-height: 44px;
+   }
+}

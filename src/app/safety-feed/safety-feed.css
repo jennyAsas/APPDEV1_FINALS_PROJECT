@@ -1,0 +1,253 @@
+/* safety-feed.css - Bootstrap + CSS only - Responsive */
+
+.safety-feed-container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .safety-feed-container {
+        padding: 20px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .safety-feed-container {
+        padding: 15px 10px;
+    }
+}
+
+.safety-feed-container h2 {
+    font-size: 1.8rem;
+    color: #1a3a52;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .safety-feed-container h2 {
+        font-size: 1.5rem;
+    }
+}
+
+.safety-feed-container > p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+    .safety-feed-container > p {
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+    }
+}
+
+.feed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .feed-list {
+        gap: 15px;
+    }
+}
+
+.feed-container {
+    padding: 10px;
+}
+
+.feed-container h3 {
+    margin-top: 0;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+}
+
+.feed-item {
+    border-left: 5px solid #ccc;
+    padding: 20px;
+    margin-bottom: 0;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 768px) {
+    .feed-item {
+        padding: 16px;
+        border-radius: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .feed-item {
+        padding: 14px 12px;
+    }
+}
+
+.feed-item.approved {
+    border-left-color: #4CAF50;
+}
+
+.feed-item.feed-item-high {
+    border-left-color: #d32f2f;
+    background-color: #fdeaea;
+}
+
+.feed-item.feed-item-medium {
+    border-left-color: #ffb300;
+    background-color: #fff9e6;
+}
+
+.feed-item.feed-item-low {
+    border-left-color: #43a047;
+    background-color: #edf7ed;
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-weight: bold;
+    gap: 12px;
+}
+
+@media (max-width: 480px) {
+    .item-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+.item-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .item-header h3 {
+        font-size: 1rem;
+    }
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: #4CAF50;
+    color: white;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.item-details {
+    margin-bottom: 12px;
+}
+
+.item-details p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+@media (max-width: 768px) {
+    .item-details p {
+        font-size: 0.9rem;
+    }
+}
+
+.type-tag,
+.priority-tag {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    color: white;
+}
+
+.type-tag {
+    background-color: #3f51b5;
+}
+
+.priority-tag.priority-high {
+    background-color: #d32f2f;
+}
+
+.priority-tag.priority-medium {
+    background-color: #ffb300;
+}
+
+.priority-tag.priority-low {
+    background-color: #43a047;
+}
+
+.item-description {
+    margin: 0 0 5px 0;
+    font-size: 0.9rem;
+}
+
+.item-footer small {
+    color: #666;
+    font-size: 0.7rem;
+}
+
+.empty-feed {
+    text-align: center;
+    padding: 40px 20px;
+    border: 2px dashed #ccc;
+    color: #888;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+@media (max-width: 768px) {
+    .empty-feed {
+        padding: 30px 15px;
+    }
+}
+
+.empty-feed p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 1rem;
+}
+
+.item-image {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.item-image img {
+    max-width: 100%;
+    max-height: 250px;
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .item-image img {
+        max-height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .item-image img {
+        max-height: 180px;
+    }
+}

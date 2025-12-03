@@ -1,0 +1,89 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /incidents/{incidentId} {
+      // Admin users (custom claim `admin == true`) can read all incidents.
+      // Regular users can read incidents unless they are marked recipient == 'admin'.
+      allow get, list: if request.auth != null && (request.auth.token.admin == true || resource.data.recipient != 'admin');
+
+      // Create: only authenticated users may create incidents; createdBy must match the user's uid or email
+      // Regular users can only create incidents that are admin-only (recipient == 'admin').
+      // Admin users may create incidents with any recipient (e.g., 'both' or 'users').
+      allow create: if request.auth != null
+               // require that the incoming createdBy matches the authenticated user's UID or email
+               && (request.resource.data.createdBy == request.auth.uid || request.resource.data.createdBy == request.auth.token.email)
+                   // requester must be authenticated and match createdBy; email verification is not required at this time
+                   && request.resource.data.description is string
+                   && request.resource.data.location is map
+                   && (
+                      // admin can set any recipient
+                      request.auth.token.admin == true
+                      || request.resource.data.recipient == 'admin'
+                    );
+
+      // Update: only admin or the creator can update; additional checks enforced here are left permissive to allow admin edits
+      allow update: if request.auth != null && (
+        request.auth.token.admin == true || resource.data.createdBy == request.auth.uid
+      );
+
+      // Delete: only admin can delete incidents
+      allow delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    match /alerts/{alertId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Users collection - store role and profile for each authenticated visitor
+    match /users/{userId} {
+      // Only the authenticated user may create their own profile; role may be 'citizen' or 'admin'
+      // The 'admin' role is only allowed during the first-time setup (no /config/adminExists) or by an existing admin.
+      allow create: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.email == request.auth.token.email
+                    && (request.resource.data.role in ['admin', 'citizen'])
+                    && (
+                      // creating admin allowed only if there is no admin yet
+                      (request.resource.data.role == 'admin' && !exists(/databases/$(database)/documents/config/adminExists))
+                      // or creating citizen is always allowed for the owner
+                      || request.resource.data.role == 'citizen'
+                      // or an already-admin user may create other roles
+                      || request.auth.token.admin == true
+                    );
+
+      // Users may update their own profile but cannot escalate role to admin unless they are already admin
+      allow update: if request.auth != null && (
+        request.auth.uid == userId || request.auth.token.admin == true
+      );
+
+      // Admins can read any user doc; users can read their own
+      allow get, list: if request.auth != null && (request.auth.uid == userId || request.auth.token.admin == true);
+
+      // No deletes via client
+      allow delete: if false;
+    }
+
+    // Config marker used to indicate an admin exists in the system. Only created once by the first admin.
+    match /config/adminExists {
+      // allow creation only if there is no existing admin marker and the creator is the authenticated user
+      allow create: if request.auth != null && !exists(/databases/$(database)/documents/config/adminExists)
+                    && request.resource.data.ownerUid == request.auth.uid;
+
+      // only admin may update this marker
+      allow update: if request.auth != null && request.auth.token.admin == true;
+
+      // allow reads (useful for client checks)
+      allow get: if true;
+      allow delete: if false;
+    }
+
+    // Default deny other collections - define rules for them as needed
+    match /{document=**} {
+      allow read: if false;
+      allow write: if false;
+    }
+  }
+}

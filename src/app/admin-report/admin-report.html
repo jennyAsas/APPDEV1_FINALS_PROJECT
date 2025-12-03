@@ -1,0 +1,179 @@
+<div class="admin-report-container">
+  <h2>Create New Report</h2>
+  <p class="subtitle">
+    Admin-initiated incident report. This report will be published immediately upon submission.
+  </p>
+
+  <ng-container *ngIf="authService.currentUser$ | async as user; else notLogged">
+    <form (ngSubmit)="onSubmit()" #reportForm="ngForm">
+      <div *ngIf="successMessage" class="message success">{{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="message error">{{ errorMessage }}</div>
+
+      <!-- Admin Info Banner -->
+      <div class="admin-info-banner">
+        <div class="badge-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.4 0 2.8 1.1 2.8 2.5V11c.6.3 1 .9 1 1.5v3c0 1-.8 1.8-1.8 1.8h-4c-1 0-1.8-.8-1.8-1.8v-3c0-.6.4-1.2 1-1.5V9.5C9.2 8.1 10.6 7 12 7zm0 1.2c-.8 0-1.5.5-1.5 1.3v1.5h3V9.5c0-.8-.7-1.3-1.5-1.3z"
+            />
+          </svg>
+        </div>
+        <div class="badge-text">
+          <strong>Police Admin Report</strong>
+          <span>Submitted by: Police Admin</span>
+        </div>
+      </div>
+
+      <!-- Safety Alert Details Section -->
+      <div class="form-section">
+        <h3 class="section-title">Safety Alert Details</h3>
+
+        <div class="form-group">
+          <label for="description">Alert Description *</label>
+          <textarea
+            id="description"
+            name="description"
+            [(ngModel)]="description"
+            rows="5"
+            required
+            placeholder="Provide a detailed description of the incident..."
+          ></textarea>
+          <span *ngIf="validationErrors['description']" class="error-text">
+            {{ validationErrors['description'] }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="priority">Priority Level *</label>
+          <select id="priority" name="priority" [(ngModel)]="priority" required>
+            <option value="high">High - Urgent, requires immediate attention</option>
+            <option value="medium">Medium - Moderate concern</option>
+            <option value="low">Low - Minor issue</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Location Information Section -->
+      <div class="form-section">
+        <h3 class="section-title">Location Information</h3>
+
+        <div class="form-group">
+          <label for="street">Street Address *</label>
+          <input
+            id="street"
+            type="text"
+            name="street"
+            [(ngModel)]="street"
+            required
+            placeholder="e.g., Session Road"
+          />
+          <span *ngIf="validationErrors['street']" class="error-text">
+            {{ validationErrors['street'] }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="barangay">Barangay *</label>
+          <input
+            id="barangay"
+            type="text"
+            name="barangay"
+            [(ngModel)]="barangay"
+            (input)="filterBarangays($event)"
+            (focus)="showBarangaySuggestions = true"
+            required
+            placeholder="Start typing to search barangays..."
+            autocomplete="off"
+          />
+          <div
+            *ngIf="showBarangaySuggestions && filteredBarangays.length > 0"
+            class="barangay-suggestions"
+          >
+            <div
+              *ngFor="let brgy of filteredBarangays.slice(0, 8)"
+              class="suggestion-item"
+              (mousedown)="selectBarangay(brgy)"
+            >
+              {{ brgy }}
+            </div>
+          </div>
+          <span *ngIf="validationErrors['barangay']" class="error-text">
+            {{ validationErrors['barangay'] }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="landmark">Landmark or Nearby Location (Optional)</label>
+          <input
+            id="landmark"
+            type="text"
+            name="landmark"
+            [(ngModel)]="landmark"
+            placeholder="e.g., Near Burnham Park"
+          />
+        </div>
+
+        <div class="form-group location-info">
+          <label>GPS Coordinates *</label>
+          <button
+            type="button"
+            class="get-location-btn"
+            (click)="getCurrentLocation()"
+            [disabled]="isGettingLocation"
+          >
+            {{ isGettingLocation ? 'Getting Location...' : 'Get Current Location' }}
+          </button>
+
+          <div *ngIf="location" class="location-display">
+            <p class="location-coords">
+              <strong>Latitude:</strong> {{ location.lat | number: '1.6-6' }}
+            </p>
+            <p class="location-coords">
+              <strong>Longitude:</strong> {{ location.lng | number: '1.6-6' }}
+            </p>
+            <p class="location-accuracy" *ngIf="locationAccuracy">
+              Accuracy: ± {{ locationAccuracy | number: '1.0-0' }} meters
+            </p>
+          </div>
+
+          <div *ngIf="locationError" class="location-error">
+            {{ locationError }}
+          </div>
+
+          <p class="help-text">
+            Location must be within Baguio City limits. Click the button above to automatically
+            detect your location.
+          </p>
+
+          <span *ngIf="validationErrors['location']" class="error-text">
+            {{ validationErrors['location'] }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="button-group">
+        <button type="submit" [disabled]="isLoading || !location" class="submit-btn">
+          {{ isLoading ? 'Issuing Alert...' : 'Issue Safety Alert' }}
+        </button>
+
+        <a routerLink="/admin-dashboard" class="cancel-btn"> Cancel </a>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-template #notLogged>
+    <div class="not-logged">
+      <p class="login-warning">You must be signed in as admin to create reports.</p>
+      <div class="action-row">
+        <a class="btn login-btn" href="/login">Sign In</a>
+      </div>
+    </div>
+  </ng-template>
+</div>
